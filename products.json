@@ -1,0 +1,23 @@
+﻿[
+  {
+    "id": 1,
+    "name": "Dragon Figurine",
+    "price": 20,
+    "description": "A detailed 3D printed dragon figurine perfect for display or tabletop games.",
+    "image": "dragon.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Elven Dice Tower",
+    "price": 35,
+    "description": "An elegant elven-style dice tower for RPG sessions.",
+    "image": "dice_tower.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Miniature Castle",
+    "price": 50,
+    "description": "A sturdy and beautiful miniature castle model, ideal for collectors.",
+    "image": "castle.jpg"
+  }
+]
