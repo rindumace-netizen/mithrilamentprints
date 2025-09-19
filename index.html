@@ -1,23 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <title>Mithrilament Prints</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-
+  
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
+  
   <style>
-    body { font-family: 'Roboto', sans-serif; margin:0; padding:0; text-align:center; background:#f5f5f5; }
-    header { background:#333; color:#fff; padding:.5rem 1rem; display:flex; align-items:center; justify-content:space-between; }
-    .brand { display:flex; align-items:center; gap:.5rem; font-family:"Cinzel Decorative", serif; font-weight:700; font-size:1.4rem; }
-    nav a { color:white; margin:0 .5rem; cursor:pointer; text-decoration:none; }
-    nav a:hover { text-decoration:underline; }
-    .page{display:none;padding:20px;}
-    .active{display:block;}
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background: #f5f5f5;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 0.5em 1em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      font-family: "Cinzel Decorative", serif;
+      font-weight: 700;
+      font-size: 1.5em;
+    }
+    nav a {
+      margin: 0 10px;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    nav a:hover { text-decoration: underline; }
+    .page { display: none; padding: 20px; }
+    .active { display: block; }
 
-    /* Product grid */
+    /* Product Grid */
     #product-list {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -25,39 +48,47 @@
       justify-items: center;
       margin-top: 20px;
     }
-
     .product {
       width: 220px;
-      border:1px solid #ccc;
-      padding:12px;
-      border-radius:8px;
-      box-shadow:0 2px 6px rgba(0,0,0,.08);
-      background:#fff;
-      text-align:center;
+      border: 1px solid #ccc;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.08);
+      background: #fff;
+      text-align: center;
       transition: transform 0.15s ease;
     }
     .product:hover { transform: scale(1.03); }
-
-    .product img { width:150px; height:150px; object-fit:cover; border-radius:6px; }
-    .product h3 { margin:10px 0 4px; }
-    .product p { margin:4px 0; }
-    .product strong { font-size: 1.1em; color:#333; }
+    .product img { width: 150px; height: 150px; object-fit: cover; border-radius: 6px; }
+    .product h3 { margin: 10px 0 4px; }
+    .product p { margin: 4px 0; }
+    .product strong { font-size: 1.1em; color: #333; }
 
     /* Cart */
-    #cart-items{display:flex;flex-direction:column;gap:12px;list-style:none;padding:0;margin-top:12px;}
-    .cart-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:6px;border:1px solid #ddd;background:#fafafa;justify-content:space-between;}
-    .cart-item img{width:80px;height:80px;object-fit:cover;border-radius:4px}
-    .cart-total-box{padding:12px 16px;background:#333;color:#fff;border-radius:8px;display:inline-block;margin-top:12px;font-weight:bold;}
-    button { padding:8px 14px; background:#0077cc;border:none;color:#fff;border-radius:6px; cursor:pointer; font-size:0.9rem; }
-    button:hover{background:#005fa3}
+    #cart-items { display: flex; flex-direction: column; gap: 12px; list-style: none; padding: 0; margin-top: 12px; }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+      justify-content: space-between;
+    }
+    .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; }
+    .cart-total-box { padding: 12px 16px; background: #333; color: #fff; border-radius: 8px; display: inline-block; margin-top: 12px; font-weight: bold; }
+    button { padding: 8px 14px; background: #0077cc; border: none; color: #fff; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+    button:hover { background: #005fa3; }
   </style>
 
   <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
+
   <header>
-    <div class="brand">Mithrilament Prints</div>
+    <div class="brand"><img src="logo.png" alt="Logo" style="height:40px;margin-right:8px;">Mithrilament Prints</div>
     <nav>
       <a onclick="showPage('shop')">Shop</a>
       <a onclick="showPage('cart')">Cart (<span id="cart-count">0</span>)</a>
@@ -75,20 +106,20 @@
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
     <div id="cart-total" class="cart-total-box">Total: $0.00</div><br>
-    <button onclick="checkout()">Checkout</button>
+    <button onclick="checkout()">Place Order</button>
   </div>
 
 <script>
   // --- Supabase Setup ---
-  const supabaseUrl = "https://tnvadgnxjqygfwqqmlqh.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL26X_t4m1pA5MgXthOeZmcO-2khCFO2lHMrRsY";
+  const supabaseUrl = "https://tnvadgnxjqygfwqqmlqh.supabase.co";       // <-- replace with your Supabase URL
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL26X_t4m1pA5MgXthOeZmcO-2khCFO2lHMrRsY";  // <-- replace with your Supabase anon key
   const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // --- Product Data ---
+  // --- Products (replace img paths with your real images) ---
   const products = [
-    { id: 1, name: "Dragon Print", price: 25.00, img: "dragon.jpeg" },
-    { id: 2, name: "Knight Print", price: 30.00, img: "dice_tower.jpeg" },
-    { id: 3, name: "Castle Print", price: 28.00, img: "castle.jpeg" }
+    { id: 1, name: "Dragon Figurine", price: 20, img: "dragon.jpg" },
+    { id: 2, name: "Elven Dice Tower", price: 35, img: "tower.jpg" },
+    { id: 3, name: "Miniature Castle", price: 50, img: "castle.jpg" }
   ];
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -148,7 +179,7 @@
         <img src="${item.img}" alt="${item.name}">
         <div style="flex:1;text-align:left;">
           <strong>${item.name}</strong><br>
-          $${item.price.toFixed(2)} × ${item.quantity}
+          $${item.price.toFixed(2)} × ${item.quantity} = $${itemTotal.toFixed(2)}
         </div>
         <button onclick="removeFromCart(${item.id})">Remove</button>
       `;
@@ -159,36 +190,26 @@
     totalBox.textContent = "Total: $" + total.toFixed(2);
   }
 
-  // --- Checkout Function ---
+  // --- Checkout ---
   async function checkout() {
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
-
+    if (cart.length === 0) { alert("Your cart is empty!"); return; }
     const customerName = prompt("Enter your name:");
     const email = prompt("Enter your email:");
+    if (!customerName || !email) { alert("Name and email required."); return; }
 
-    let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    const { data, error } = await supabase
-      .from("orders")
-      .insert([
-        {
-          customer_name: customerName,
-          email: email,
-          cart: cart,
-          total: total
-        }
-      ]);
+    const { data, error } = await supabase.from("orders").insert([
+      { customer_name: customerName, email: email, cart: cart, total: total }
+    ]);
 
     if (error) {
-      console.error("Error saving order:", error);
-      alert("There was a problem saving your order.");
+      console.error(error);
+      alert("Error saving order.");
     } else {
       alert("Order placed successfully!");
       cart = [];
-      localStorage.clear();
+      localStorage.removeItem("cart");
       loadCart();
     }
   }
@@ -205,5 +226,4 @@
 </script>
 </body>
 </html>
-
 
