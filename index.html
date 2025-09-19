@@ -112,14 +112,14 @@
 <script>
   // --- Supabase Setup ---
   const supabaseUrl = "https://tnvadgnxjqygfwqqmlqh.supabase.co";       // <-- replace with your Supabase URL
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL26X_t4m1pA5MgXthOeZmcO-2khCFO2lHMrRsY";  // <-- replace with your Supabase anon key
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL2[...]"
   const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // --- Products (replace img paths with your real images) ---
+  // --- Products (filenames updated) ---
   const products = [
-    { id: 1, name: "Dragon Figurine", price: 20, img: "dragon.jpg" },
-    { id: 2, name: "Elven Dice Tower", price: 35, img: "tower.jpg" },
-    { id: 3, name: "Miniature Castle", price: 50, img: "castle.jpg" }
+    { id: 1, name: "Dragon Figurine", price: 20, img: "dragon.jpeg" },
+    { id: 2, name: "Elven Dice Tower", price: 35, img: "dice_tower.jpeg" },
+    { id: 3, name: "Miniature Castle", price: 50, img: "castle.jpeg" }
   ];
 
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -187,7 +187,7 @@
     });
 
     count.textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
-    totalBox.textContent = "Total: $" + total.toFixed(2);
+    totalBox.textContent = "Total: "$ + total.toFixed(2);
   }
 
   // --- Checkout ---
@@ -226,4 +226,3 @@
 </script>
 </body>
 </html>
-
