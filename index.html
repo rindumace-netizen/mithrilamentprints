@@ -1,120 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Mithrilament Prints</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    header {
-      background: #333;
-      color: #fff;
-      padding: 0.5em 1em;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header img.logo {
-      height: 50px;
-      margin-right: 10px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      font-size: 1.5em;
-      font-weight: bold;
-      font-family: "Cinzel Decorative", serif;
-    }
-    nav a {
-      margin: 0 10px;
-      color: white;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .btn, button {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #0077cc;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .btn:hover, button:hover {
-      background: #005fa3;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; }
+    header { background: #333; color: #fff; padding: 0.5em 1em; display: flex; align-items: center; justify-content: space-between; }
+    header img.logo { height: 50px; margin-right: 10px; }
+    .brand { display: flex; align-items: center; font-size: 1.5em; font-weight: bold; font-family: "Cinzel Decorative", serif; }
+    nav a { margin: 0 10px; color: white; text-decoration: none; cursor: pointer; }
+    .btn, button { display: inline-block; margin-top: 15px; padding: 10px 20px; background: #0077cc; color: white; border: none; cursor: pointer; }
+    .btn:hover, button:hover { background: #005fa3; }
     .page { display: none; padding: 20px; }
     .active { display: block; }
-    .product {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin: 15px;
-      display: inline-block;
-      width: 220px;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .product img {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
+    .product { border: 1px solid #ccc; padding: 15px; margin: 15px; display: inline-block; width: 220px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .product img { width: 150px; height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
     ul { list-style: none; padding: 0; }
-    .hero-image {
-      margin: 20px auto;
-      max-width: 250px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    /* Cart page styling */
-    #cart-items {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-top: 20px;
-      padding: 0;
-      list-style: none;
-    }
-    .cart-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid #ccc;
-      padding: 10px;
-      border-radius: 6px;
-      background: #f9f9f9;
-    }
-    .cart-item img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 4px;
-      margin-right: 15px;
-    }
-    .cart-item-details {
-      flex: 1;
-      text-align: left;
-    }
-    .cart-total-box {
-      margin-bottom: 15px;
-      padding: 15px 20px;
-      background: #333;
-      color: #fff;
-      font-weight: bold;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      text-align: right;
-    }
+    .hero-image { margin: 20px auto; max-width: 250px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    #cart-items { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; padding: 0; list-style: none; }
+    .cart-item { display: flex; align-items: center; border: 1px solid #ccc; padding: 10px; border-radius: 6px; background: #f9f9f9; }
+    .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; margin-right: 15px; }
+    .cart-item-details { flex: 1; text-align: left; }
+    .cart-total-box { position: absolute; top: 100px; right: 30px; padding: 15px 20px; background: #333; color: #fff; font-weight: bold; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
   </style>
-
-  <!-- Fantasy Font -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -153,7 +61,15 @@
     <button onclick="checkout()">Checkout</button>
   </div>
 
+  <!-- Supabase + Store Logic -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
+    // 🔹 Supabase Setup (replace with your own)
+    const supabaseUrl = "https://tnvadgnxjqygfwqqmlqh.supabase.co"; // e.g. https://abcd1234.supabase.co
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL26X_t4m1pA5MgXthOeZmcO-2khCFO2lHMrRsY";
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Example products
     const products = [
       { id: 1, name: "Dragon Figurine", price: 20, description: "A detailed fantasy dragon.", image: "dragon.jpg" },
       { id: 2, name: "Elven Dice Tower", price: 35, description: "Elegant tower for tabletop dice rolling.", image: "tower.jpg" },
@@ -162,6 +78,7 @@
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    // Page navigation
     function showPage(pageId) {
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       document.getElementById(pageId).classList.add("active");
@@ -169,6 +86,7 @@
       if (pageId === "cart") loadCart();
     }
 
+    // Load products dynamically
     function loadProducts() {
       const list = document.getElementById("product-list");
       list.innerHTML = "";
@@ -186,18 +104,20 @@
       });
     }
 
+    // Add to cart
     function addToCart(id) {
       const product = products.find(p => p.id === id);
       const existing = cart.find(item => item.id === id);
       if (existing) {
-        existing.quantity = existing.quantity ? existing.quantity + 1 : 2;
+        existing.quantity += 1;
       } else {
-        cart.push({...product, quantity: 1});
+        cart.push({ ...product, quantity: 1 });
       }
       localStorage.setItem("cart", JSON.stringify(cart));
       alert(`${product.name} added to cart!`);
     }
 
+    // Load cart
     function loadCart() {
       const cartItems = document.getElementById("cart-items");
       const totalBox = document.getElementById("cart-total");
@@ -211,21 +131,16 @@
 
       let sum = 0;
       cart.forEach(item => {
-        if (!item.quantity) item.quantity = 1; // ensure quantity exists
         sum += item.price * item.quantity;
-
         const li = document.createElement("li");
         li.className = "cart-item";
-        li.style.justifyContent = "space-between";
         li.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 15px;">
-            <img src="${item.image}" alt="${item.name}">
-            <div class="cart-item-details">
-              <strong>${item.name}</strong><br>
-              $${item.price} x ${item.quantity} = $${item.price * item.quantity}
-            </div>
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-item-details">
+            <strong>${item.name}</strong><br>
+            $${item.price} × ${item.quantity}
           </div>
-          <button onclick="decreaseQuantity(${item.id})">Remove from Cart</button>
+          <button onclick="removeFromCart(${item.id})">Remove</button>
         `;
         cartItems.appendChild(li);
       });
@@ -233,27 +148,45 @@
       totalBox.textContent = `Total: $${sum}`;
     }
 
-    function decreaseQuantity(id) {
-      const existing = cart.find(item => item.id === id);
-      if (existing) {
-        existing.quantity -= 1;
-        if (existing.quantity <= 0) {
-          cart = cart.filter(item => item.id !== id);
-        }
-        localStorage.setItem("cart", JSON.stringify(cart));
-        loadCart();
-      }
+    // Remove from cart
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
     }
 
-    function checkout() {
+    // Checkout with Supabase save
+    async function checkout() {
       if (cart.length === 0) {
         alert("Your cart is empty!");
         return;
       }
-      alert("Checkout not implemented. (Here you'd integrate PayPal/Stripe)");
-      cart = [];
-      localStorage.clear();
-      loadCart();
+
+      const customerName = prompt("Enter your name:");
+      const email = prompt("Enter your email:");
+
+      let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      const { data, error } = await supabase
+        .from("orders")
+        .insert([
+          {
+            customer_name: customerName,
+            email: email,
+            cart: cart,
+            total: total
+          }
+        ]);
+
+      if (error) {
+        console.error("Error saving order:", error);
+        alert("There was a problem saving your order. Try again.");
+      } else {
+        alert("Order placed successfully!");
+        cart = [];
+        localStorage.clear();
+        loadCart();
+      }
     }
   </script>
 </body>
