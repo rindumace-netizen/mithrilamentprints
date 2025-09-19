@@ -109,7 +109,7 @@
     // --- Supabase Setup ---
     const supabaseUrl = "https://tnvadgnxjqygfwqqmlqh.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL2[...]";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     // --- Products (replace img paths with your real images) ---
     const products = [
