@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Mithrilament Prints</title>
-  
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -39,7 +37,6 @@
     nav a:hover { text-decoration: underline; }
     .page { display: none; padding: 20px; }
     .active { display: block; }
-
     /* Product Grid */
     #product-list {
       display: grid;
@@ -63,7 +60,6 @@
     .product h3 { margin: 10px 0 4px; }
     .product p { margin: 4px 0; }
     .product strong { font-size: 1.1em; color: #333; }
-
     /* Cart */
     #cart-items { display: flex; flex-direction: column; gap: 12px; list-style: none; padding: 0; margin-top: 12px; }
     .cart-item {
@@ -81,7 +77,6 @@
     button { padding: 8px 14px; background: #0077cc; border: none; color: #fff; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
     button:hover { background: #005fa3; }
   </style>
-
   <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
@@ -109,120 +104,121 @@
     <button onclick="checkout()">Place Order</button>
   </div>
 
-<script>
-  // --- Supabase Setup ---
-  const supabaseUrl = "https://tnvadgnxjqygfwqqmlqh.supabase.co";       // <-- replace with your Supabase URL
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL2[...]"
-  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+  <!-- All JS goes at the end for best compatibility -->
+  <script>
+    // --- Supabase Setup ---
+    const supabaseUrl = "https://tnvadgnxjqygfwqqmlqh.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudmFkZ254anF5Z2Z3cXFtbHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzY1NjksImV4cCI6MjA3MzU1MjU2OX0.3SF9zL2[...]";
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-  // --- Products (filenames updated) ---
-  const products = [
-    { id: 1, name: "Dragon Figurine", price: 20, img: "dragon.jpeg" },
-    { id: 2, name: "Elven Dice Tower", price: 35, img: "dice_tower.jpeg" },
-    { id: 3, name: "Miniature Castle", price: 50, img: "castle.jpeg" }
-  ];
+    // --- Products (replace img paths with your real images) ---
+    const products = [
+      { id: 1, name: "Dragon Figurine", price: 20, img: "dragon.jpeg" },
+      { id: 2, name: "Elven Dice Tower", price: 35, img: "dice_tower.jpeg" },
+      { id: 3, name: "Miniature Castle", price: 50, img: "castle.jpeg" }
+    ];
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // --- Show Products ---
-  function showProducts() {
-    const list = document.getElementById("product-list");
-    list.innerHTML = "";
-    products.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "product";
-      div.innerHTML = `
-        <img src="${p.img}" alt="${p.name}">
-        <h3>${p.name}</h3>
-        <p><strong>$${p.price.toFixed(2)}</strong></p>
-        <button onclick="addToCart(${p.id})">Add to Cart</button>
-      `;
-      list.appendChild(div);
-    });
-  }
-
-  // --- Cart Functions ---
-  function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    const existing = cart.find(item => item.id === id);
-    if (existing) {
-      existing.quantity++;
-    } else {
-      cart.push({ ...product, quantity: 1 });
+    // --- Show Products ---
+    function showProducts() {
+      const list = document.getElementById("product-list");
+      list.innerHTML = "";
+      products.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p><strong>$${p.price.toFixed(2)}</strong></p>
+          <button onclick="addToCart(${p.id})">Add to Cart</button>
+        `;
+        list.appendChild(div);
+      });
     }
-    saveCart();
-  }
 
-  function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
-    saveCart();
-  }
+    // --- Cart Functions ---
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      saveCart();
+    }
 
-  function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    loadCart();
-  }
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      saveCart();
+    }
 
-  function loadCart() {
-    const list = document.getElementById("cart-items");
-    const count = document.getElementById("cart-count");
-    const totalBox = document.getElementById("cart-total");
-    list.innerHTML = "";
-    let total = 0;
-
-    cart.forEach(item => {
-      const li = document.createElement("li");
-      li.className = "cart-item";
-      const itemTotal = item.price * item.quantity;
-      total += itemTotal;
-      li.innerHTML = `
-        <img src="${item.img}" alt="${item.name}">
-        <div style="flex:1;text-align:left;">
-          <strong>${item.name}</strong><br>
-          $${item.price.toFixed(2)} × ${item.quantity} = $${itemTotal.toFixed(2)}
-        </div>
-        <button onclick="removeFromCart(${item.id})">Remove</button>
-      `;
-      list.appendChild(li);
-    });
-
-    count.textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
-    totalBox.textContent = "Total: "$ + total.toFixed(2);
-  }
-
-  // --- Checkout ---
-  async function checkout() {
-    if (cart.length === 0) { alert("Your cart is empty!"); return; }
-    const customerName = prompt("Enter your name:");
-    const email = prompt("Enter your email:");
-    if (!customerName || !email) { alert("Name and email required."); return; }
-
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-    const { data, error } = await supabase.from("orders").insert([
-      { customer_name: customerName, email: email, cart: cart, total: total }
-    ]);
-
-    if (error) {
-      console.error(error);
-      alert("Error saving order.");
-    } else {
-      alert("Order placed successfully!");
-      cart = [];
-      localStorage.removeItem("cart");
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
       loadCart();
     }
-  }
 
-  // --- Page Navigation ---
-  function showPage(id) {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-  }
+    function loadCart() {
+      const list = document.getElementById("cart-items");
+      const count = document.getElementById("cart-count");
+      const totalBox = document.getElementById("cart-total");
+      list.innerHTML = "";
+      let total = 0;
 
-  // Initialize
-  showProducts();
-  loadCart();
-</script>
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.className = "cart-item";
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        li.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div style="flex:1;text-align:left;">
+            <strong>${item.name}</strong><br>
+            $${item.price.toFixed(2)} × ${item.quantity} = $${itemTotal.toFixed(2)}
+          </div>
+          <button onclick="removeFromCart(${item.id})">Remove</button>
+        `;
+        list.appendChild(li);
+      });
+
+      count.textContent = cart.reduce((sum, i) => sum + i.quantity, 0);
+      totalBox.textContent = "Total: $" + total.toFixed(2);
+    }
+
+    // --- Checkout ---
+    async function checkout() {
+      if (cart.length === 0) { alert("Your cart is empty!"); return; }
+      const customerName = prompt("Enter your name:");
+      const email = prompt("Enter your email:");
+      if (!customerName || !email) { alert("Name and email required."); return; }
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      const { data, error } = await supabase.from("orders").insert([
+        { customer_name: customerName, email: email, cart: cart, total: total }
+      ]);
+
+      if (error) {
+        console.error(error);
+        alert("Error saving order.");
+      } else {
+        alert("Order placed successfully!");
+        cart = [];
+        localStorage.removeItem("cart");
+        loadCart();
+      }
+    }
+
+    // --- Page Navigation ---
+    function showPage(id) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // Initialize
+    showProducts();
+    loadCart();
+  </script>
 </body>
 </html>
